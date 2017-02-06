@@ -5,14 +5,19 @@ using System.Web;
 
 namespace WhibService.Models
 {
+  /// <summary>
+  /// This enum represents the types of regions.
+  /// </summary>
   public enum RegionType
   {
-    World = 0,
-    
-    Continent = 1,
+    Unknown = 0,
 
-    Country = 2,
+    World,
 
-    Region = 3,
+    Continent,
+
+    Country,
+
+    SubNational,
   }
 }

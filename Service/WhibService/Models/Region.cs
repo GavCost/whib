@@ -1,15 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace WhibService.Models
+﻿namespace WhibService.Models
 {
+  using System;
+  using System.Collections.Generic;
+  using System.Diagnostics;
+  using System.Linq;
+  using System.Web;
+
+  /// <summary>
+  /// This class represents an region of the world, it could be the world itself, a continent, a country, or a region of a country.
+  /// It is one that has two basic statistics, area and population.
+  /// </summary>
+  [DebuggerDisplay("Name = {EnglishName}, Id = {Id}")]
   public class Region
   {
+    public int Id { get; set; }
+
     public bool IsDeleted { get; set; }
 
     public RegionType RegionType { get; set; }
+
+    public int ParentId { get; set; }
 
     public string EnglishName { get; set; }
 

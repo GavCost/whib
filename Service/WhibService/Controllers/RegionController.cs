@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WhibService.DataAccessors;
 using WhibService.Models;
 
 namespace WhibService.Controllers
@@ -11,9 +12,9 @@ namespace WhibService.Controllers
   public class RegionController : ApiController
   {
     // GET: api/Region
-    public IEnumerable<string> Get()
+    public IEnumerable<Region> Get()
     {
-      return new string[] { "value1", "value2" };
+      return RegionDataAccessor.GetRegions();
     }
 
     // GET: api/Region/5
@@ -29,8 +30,9 @@ namespace WhibService.Controllers
     }
 
     // POST: api/Region
-    public void Post([FromBody]string value)
+    public void Post([FromBody]Region value)
     {
+      RegionDataAccessor.MergeRegion(value);
     }
 
     // PUT: api/Region/5
