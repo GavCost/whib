@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS Region (
     UtcCreated DATETIME NOT NULL,
     UtcUpdated DATETIME NOT NULL,
     IsDeleted BIT NOT NULL,
+    ParentId INT,
     RegionType TINYINT NOT NULL,
     EnglishName NVARCHAR(200) NOT NULL UNIQUE,
     LocalName NVARCHAR(200),
@@ -55,14 +56,7 @@ CREATE TABLE IF NOT EXISTS City (
     Population BIGINT
 );
 
-CREATE TABLE IF NOT EXISTS Region_Region (
-    Parent_RegionId INT NULL,
-    Child_RegionId INT NOT NULL
-);
-
-CREATE UNIQUE INDEX IX_Region_Region_ParentChild ON Region_Region (Parent_RegionId, Child_RegionId);
-
-CREATE INDEX IX_Region_Region_ChildRegion ON Region_Region (Child_RegionId);
+CREATE UNIQUE INDEX IX_City ON City (RegionId, EnglishName);
 
 CREATE TABLE IF NOT EXISTS Traveller_Region (
     TravellerId INT NOT NULL,
