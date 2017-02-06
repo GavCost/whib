@@ -60,7 +60,9 @@ CREATE TABLE IF NOT EXISTS Region_Region (
     Child_RegionId INT NOT NULL
 );
 
-CREATE UNIQUE INDEX IX_Region_Region ON Region_Region (Parent_RegionId, Child_RegionId);
+CREATE UNIQUE INDEX IX_Region_Region_ParentChild ON Region_Region (Parent_RegionId, Child_RegionId);
+
+CREATE INDEX IX_Region_Region_ChildRegion ON Region_Region (Child_RegionId);
 
 CREATE TABLE IF NOT EXISTS Traveller_Region (
     TravellerId INT NOT NULL,

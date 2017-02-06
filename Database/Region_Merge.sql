@@ -10,7 +10,7 @@ BEGIN
   WHERE
     EnglishName = _EnglishName INTO _CurrentId;
   
-  SET _UtcDateTime = NOW();
+  SET _UtcDateTime = UTC_TIMESTAMP();
 
   IF (_CurrentId IS NULL) THEN
     BEGIN
