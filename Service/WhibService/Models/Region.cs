@@ -21,6 +21,8 @@
 
     public int ParentId { get; set; }
 
+    public string ParentName { get; set; }
+
     public string EnglishName { get; set; }
 
     public string LocalName { get; set; }
