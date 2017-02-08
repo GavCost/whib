@@ -19,7 +19,7 @@
 
     public RegionType RegionType { get; set; }
 
-    public int ParentId { get; set; }
+    public int? ParentId { get; set; }
 
     public string ParentName { get; set; }
 
@@ -35,8 +35,8 @@
 
     public long Population { get; set; }
 
-    public int Capital_CityId { get; set; }
+    public int? Capital_CityId { get; set; }
 
-    public int Largest_CityId { get; set; }
+    public int? Largest_CityId { get; set; }
   }
 }

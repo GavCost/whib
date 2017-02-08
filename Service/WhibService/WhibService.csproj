@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\RegionController.cs" />
+    <Compile Include="DataAccessors\DataAccessorBase.cs" />
     <Compile Include="DataAccessors\RegionDataAccessor.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

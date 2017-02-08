@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Web;
-using MySql.Data.MySqlClient;
-using WhibService.Models;
-
-namespace WhibService.DataAccessors
+﻿namespace WhibService.DataAccessors
 {
+  using System;
+  using System.Collections.Generic;
+  using System.Data;
+  using MySql.Data.MySqlClient;
+  using WhibService.Models;
+
   public static class RegionDataAccessor
   {
-    private const string connectionString = @"server=localhost;userid=whib;password=Abc123?!;database=whib";
-
     public static IEnumerable<Region> GetRegions()
     {
       List<Region> regionList = new List<Region>();
@@ -19,11 +15,11 @@ namespace WhibService.DataAccessors
 
       try
       {
-        using (connection = new MySqlConnection(connectionString))
+        using (connection = new MySqlConnection(DataAccessorBase.ConnectionString))
         {
           connection.Open();
 
-          string querySql = "SELECT * FROM Region;";
+          string querySql = "SELECT Id, IsDeleted, ParentId, RegionType, EnglishName, LocalName, IsoCode2, IsoCode3, AreaSqKm, Population, Capital_CityId, Largest_CityId FROM Region;";
           MySqlCommand sqlCommand = new MySqlCommand(querySql, connection);
 
           MySqlDataReader reader = sqlCommand.ExecuteReader();
@@ -32,7 +28,17 @@ namespace WhibService.DataAccessors
           {
             Region region = new Region();
             region.Id = reader.GetInt32(0);
-            region.EnglishName = reader.GetString(6);
+            region.IsDeleted = reader.GetBoolean(1);
+            region.ParentId = reader.GetValue(2) == DBNull.Value ? (int?)null : reader.GetInt32(2);
+            region.RegionType = (RegionType)reader.GetByte(3);
+            region.EnglishName = reader.GetString(4);
+            region.LocalName = reader.GetValue(5) == DBNull.Value ? (string)null : reader.GetString(5);
+            region.IsoCode2 = reader.GetValue(6) == DBNull.Value ? (string)null : reader.GetString(6);
+            region.IsoCode3 = reader.GetValue(7) == DBNull.Value ? (string)null : reader.GetString(7);
+            region.AreaSqKm = reader.GetDecimal(8);
+            region.Population = reader.GetInt64(9);
+            region.Capital_CityId = reader.GetValue(10) == DBNull.Value ? (int?)null : reader.GetInt32(10);
+            region.Largest_CityId = reader.GetValue(11) == DBNull.Value ? (int?)null : reader.GetInt32(11);
             regionList.Add(region);
           }
         }
@@ -64,56 +70,24 @@ namespace WhibService.DataAccessors
       {
         if (region != null)
         {
-          using (connection = new MySqlConnection(connectionString))
+          using (connection = new MySqlConnection(DataAccessorBase.ConnectionString))
           {
             connection.Open();
 
             MySqlCommand sqlCommand = new MySqlCommand("Region_Merge", connection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
-            MySqlParameter isDeletedParam = new MySqlParameter("_IsDeleted", MySqlDbType.Bit);
-            isDeletedParam.Value = region.IsDeleted;
-            sqlCommand.Parameters.Add(isDeletedParam);
-
-            MySqlParameter parentIdParam = new MySqlParameter("_ParentId", MySqlDbType.Int32);
-            parentIdParam.Value = region.ParentId;
-            sqlCommand.Parameters.Add(parentIdParam);
-
-            MySqlParameter regionTypeParam = new MySqlParameter("_RegionType", MySqlDbType.Byte);
-            regionTypeParam.Value = (byte)region.RegionType;
-            sqlCommand.Parameters.Add(regionTypeParam);
-
-            MySqlParameter englishNameParam = new MySqlParameter("_EnglishName", MySqlDbType.String, 200);
-            englishNameParam.Value = region.EnglishName;
-            sqlCommand.Parameters.Add(englishNameParam);
-
-            MySqlParameter localNameParam = new MySqlParameter("_LocalName", MySqlDbType.String, 200);
-            localNameParam.Value = region.LocalName;
-            sqlCommand.Parameters.Add(localNameParam);
-
-            MySqlParameter isoCode2Param = new MySqlParameter("_IsoCode2", MySqlDbType.String, 2);
-            isoCode2Param.Value = region.IsoCode2;
-            sqlCommand.Parameters.Add(isoCode2Param);
-
-            MySqlParameter isoCode3Param = new MySqlParameter("_IsoCode3", MySqlDbType.String, 3);
-            isoCode3Param.Value = region.IsoCode3;
-            sqlCommand.Parameters.Add(isoCode3Param);
-
-            MySqlParameter areaSqKmParam = new MySqlParameter("_AreaSqKm", MySqlDbType.Decimal);
-            areaSqKmParam.Value = region.AreaSqKm;
-            sqlCommand.Parameters.Add(areaSqKmParam);
-
-            MySqlParameter populationParam = new MySqlParameter("_Population", MySqlDbType.Int64);
-            populationParam.Value = region.Population;
-            sqlCommand.Parameters.Add(populationParam);
-
-            MySqlParameter capitalCityIdParam = new MySqlParameter("_Capital_CityId", MySqlDbType.Int32);
-            capitalCityIdParam.Value = region.Capital_CityId;
-            sqlCommand.Parameters.Add(capitalCityIdParam);
-
-            MySqlParameter largestCityIdParam = new MySqlParameter("_Largest_CityId", MySqlDbType.Int32);
-            largestCityIdParam.Value = region.Largest_CityId;
-            sqlCommand.Parameters.Add(largestCityIdParam);
+            DataAccessorBase.AddBooleanParam(sqlCommand, "_IsDeleted", region.IsDeleted);
+            DataAccessorBase.AddInt32Param(sqlCommand, "_ParentId", region.ParentId, DataAccessorBase.ParamConversionType.ConvertDefaultValueToNull);
+            DataAccessorBase.AddByteParam(sqlCommand, "_RegionType", (byte)region.RegionType);
+            DataAccessorBase.AddStringParam(sqlCommand, "_EnglishName", 200, region.EnglishName);
+            DataAccessorBase.AddStringParam(sqlCommand, "_LocalName", 200, region.LocalName, DataAccessorBase.ParamConversionType.ConvertDefaultValueToNull);
+            DataAccessorBase.AddStringParam(sqlCommand, "_IsoCode2", 2, region.IsoCode2);
+            DataAccessorBase.AddStringParam(sqlCommand, "_IsoCode3", 3, region.IsoCode3);
+            DataAccessorBase.AddDecimalParam(sqlCommand, "_AreaSqKm", region.AreaSqKm);
+            DataAccessorBase.AddInt64Param(sqlCommand, "_Population", region.Population);
+            DataAccessorBase.AddInt32Param(sqlCommand, "_Capital_CityId", region.Capital_CityId, DataAccessorBase.ParamConversionType.ConvertDefaultValueToNull);
+            DataAccessorBase.AddInt32Param(sqlCommand, "_Largest_CityId", region.Largest_CityId, DataAccessorBase.ParamConversionType.ConvertDefaultValueToNull);
 
             sqlCommand.ExecuteNonQuery();
           }

@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS Region (
     LocalName NVARCHAR(200),
     IsoCode2 NCHAR(2),
     IsoCode3 NCHAR(3),
-    AreaSqKm DECIMAL(15 , 3 ),
-    Population BIGINT,
+    AreaSqKm DECIMAL(15 , 3 ) NOT NULL,
+    Population BIGINT NOT NULL,
     Capital_CityId INT,
     Largest_CityId INT
 );
