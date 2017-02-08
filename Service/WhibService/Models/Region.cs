@@ -1,10 +1,6 @@
 ﻿namespace WhibService.Models
 {
-  using System;
-  using System.Collections.Generic;
   using System.Diagnostics;
-  using System.Linq;
-  using System.Web;
 
   /// <summary>
   /// This class represents an region of the world, it could be the world itself, a continent, a country, or a region of a country.
@@ -37,6 +33,10 @@
 
     public int? Capital_CityId { get; set; }
 
+    public string Capital_CityName { get; set; }
+
     public int? Largest_CityId { get; set; }
+
+    public string Largest_CityName { get; set; }
   }
 }

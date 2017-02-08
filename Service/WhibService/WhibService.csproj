@@ -119,12 +119,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
     <Compile Include="DataAccessors\DataAccessorBase.cs" />
+    <Compile Include="DataAccessors\CityDataAccessor.cs" />
     <Compile Include="DataAccessors\RegionDataAccessor.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\City.cs" />
     <Compile Include="Models\RegionType.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

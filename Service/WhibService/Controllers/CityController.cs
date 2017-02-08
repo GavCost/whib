@@ -5,18 +5,18 @@
   using WhibService.DataAccessors;
   using WhibService.Models;
 
-  public class RegionController : ApiController
+  public class CityController : ApiController
   {
-    // GET: api/Region
-    public IEnumerable<Region> Get()
+    // GET: api/City
+    public IEnumerable<City> Get()
     {
-      return RegionDataAccessor.GetRegions();
+      return CityDataAccessor.GetCities();
     }
 
-    ////// GET: api/Region/5
-    ////public Region Get(string name)
+    ////// GET: api/City/5
+    ////public City Get(string name)
     ////{
-    ////  return new Region()
+    ////  return new City()
     ////  {
     ////    EnglishName = "Test",
     ////    LocalName = "Testski",
@@ -25,18 +25,18 @@
     ////  };
     ////}
 
-    // POST: api/Region
-    public void Post([FromBody]Region value)
+    // POST: api/City
+    public void Post([FromBody]City value)
     {
-      RegionDataAccessor.MergeRegion(value);
+      CityDataAccessor.MergeCity(value);
     }
 
-    ////// PUT: api/Region/5
+    ////// PUT: api/City/5
     ////public void Put(string name, [FromBody]string value)
     ////{
     ////}
 
-    ////// DELETE: api/Region/5
+    ////// DELETE: api/City/5
     ////public void Delete(string name)
     ////{
     ////}
