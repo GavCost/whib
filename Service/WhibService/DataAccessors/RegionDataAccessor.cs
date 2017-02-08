@@ -19,7 +19,7 @@
         {
           connection.Open();
 
-          string querySql = "SELECT Id, IsDeleted, ParentId, RegionType, EnglishName, LocalName, IsoCode2, IsoCode3, AreaSqKm, Population, Capital_CityId, Largest_CityId FROM Region;";
+          string querySql = "SELECT Id, IsDeleted, ParentId, Region_GetNameFromId(ParentId) AS ParentName, RegionType, EnglishName, LocalName, IsoCode2, IsoCode3, AreaSqKm, Population, Capital_CityId, Largest_CityId FROM Region;";
           MySqlCommand sqlCommand = new MySqlCommand(querySql, connection);
 
           MySqlDataReader reader = sqlCommand.ExecuteReader();
@@ -30,15 +30,16 @@
             region.Id = reader.GetInt32(0);
             region.IsDeleted = reader.GetBoolean(1);
             region.ParentId = reader.GetValue(2) == DBNull.Value ? (int?)null : reader.GetInt32(2);
-            region.RegionType = (RegionType)reader.GetByte(3);
-            region.EnglishName = reader.GetString(4);
-            region.LocalName = reader.GetValue(5) == DBNull.Value ? (string)null : reader.GetString(5);
-            region.IsoCode2 = reader.GetValue(6) == DBNull.Value ? (string)null : reader.GetString(6);
-            region.IsoCode3 = reader.GetValue(7) == DBNull.Value ? (string)null : reader.GetString(7);
-            region.AreaSqKm = reader.GetDecimal(8);
-            region.Population = reader.GetInt64(9);
-            region.Capital_CityId = reader.GetValue(10) == DBNull.Value ? (int?)null : reader.GetInt32(10);
-            region.Largest_CityId = reader.GetValue(11) == DBNull.Value ? (int?)null : reader.GetInt32(11);
+            region.ParentName = reader.GetValue(3) == DBNull.Value ? (string)null : reader.GetString(3);
+            region.RegionType = (RegionType)reader.GetByte(4);
+            region.EnglishName = reader.GetString(5);
+            region.LocalName = reader.GetValue(6) == DBNull.Value ? (string)null : reader.GetString(6);
+            region.IsoCode2 = reader.GetValue(7) == DBNull.Value ? (string)null : reader.GetString(7);
+            region.IsoCode3 = reader.GetValue(8) == DBNull.Value ? (string)null : reader.GetString(8);
+            region.AreaSqKm = reader.GetDecimal(9);
+            region.Population = reader.GetInt64(10);
+            region.Capital_CityId = reader.GetValue(11) == DBNull.Value ? (int?)null : reader.GetInt32(11);
+            region.Largest_CityId = reader.GetValue(12) == DBNull.Value ? (int?)null : reader.GetInt32(12);
             regionList.Add(region);
           }
         }
@@ -78,7 +79,7 @@
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
             DataAccessorBase.AddBooleanParam(sqlCommand, "_IsDeleted", region.IsDeleted);
-            DataAccessorBase.AddInt32Param(sqlCommand, "_ParentId", region.ParentId, DataAccessorBase.ParamConversionType.ConvertDefaultValueToNull);
+            DataAccessorBase.AddStringParam(sqlCommand, "_ParentName", 200, region.ParentName, DataAccessorBase.ParamConversionType.ConvertDefaultValueToNull);
             DataAccessorBase.AddByteParam(sqlCommand, "_RegionType", (byte)region.RegionType);
             DataAccessorBase.AddStringParam(sqlCommand, "_EnglishName", 200, region.EnglishName);
             DataAccessorBase.AddStringParam(sqlCommand, "_LocalName", 200, region.LocalName, DataAccessorBase.ParamConversionType.ConvertDefaultValueToNull);

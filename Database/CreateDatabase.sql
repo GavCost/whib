@@ -74,9 +74,41 @@ CREATE UNIQUE INDEX IX_Organisation_Region ON Organisation_Region (OrganisationI
 
 DELIMITER |
 
+DROP FUNCTION IF EXISTS `Region_GetNameFromId`|
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `Region_GetNameFromId`(_Id INT) RETURNS NVARCHAR(200)
+BEGIN
+
+DECLARE _Name NVARCHAR(200);
+SELECT 
+    EnglishName
+FROM
+    Region
+WHERE
+    Id = _Id INTO _Name;
+
+RETURN _Name;
+END|
+
+DROP FUNCTION IF EXISTS `Region_GetIdFromName`|
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `Region_GetIdFromName`(_Name NVARCHAR(200)) RETURNS INT
+BEGIN
+
+DECLARE _Id INT;
+SELECT 
+    Id
+FROM
+    Region
+WHERE
+    EnglishName = _Name INTO _Id;
+
+RETURN _Id;
+END|
+
 DROP PROCEDURE IF EXISTS `Region_Merge`|
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `Region_Merge`(in _IsDeleted BIT, in _ParentId INT, in _RegionType TINYINT, in _EnglishName NVARCHAR(200), in _LocalName NVARCHAR(200), in _IsoCode2 CHAR(2), in _IsoCode3 CHAR(3), in _AreaSqKm DECIMAL(15 , 3 ), in _Population BIGINT, in _Capital_CityId INT, in _Largest_CityId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Region_Merge`(in _IsDeleted BIT, in _ParentName NVARCHAR(200), in _RegionType TINYINT, in _EnglishName NVARCHAR(200), in _LocalName NVARCHAR(200), in _IsoCode2 CHAR(2), in _IsoCode3 CHAR(3), in _AreaSqKm DECIMAL(15 , 3 ), in _Population BIGINT, in _Capital_CityId INT, in _Largest_CityId INT)
 BEGIN
   DECLARE _CurrentId INT;
   DECLARE _UtcDateTime DATETIME;
@@ -95,7 +127,7 @@ BEGIN
       INSERT INTO Region
       (UtcCreated, UtcUpdated, IsDeleted, ParentId, RegionType, EnglishName, LocalName, IsoCode2, IsoCode3, AreaSqKm, Population, Capital_CityId, Largest_CityId)
       VALUES
-      (_UtcDateTime, _UtcDateTime, _IsDeleted, _ParentId, _RegionType, _EnglishName, _LocalName, _IsoCode2, _IsoCode3, _AreaSqKm, _Population, _Capital_CityId, _Largest_CityId);
+      (_UtcDateTime, _UtcDateTime, _IsDeleted, Region_GetIdFromName(_ParentName), _RegionType, _EnglishName, _LocalName, _IsoCode2, _IsoCode3, _AreaSqKm, _Population, _Capital_CityId, _Largest_CityId);
     
     SELECT 
       Id
@@ -109,7 +141,7 @@ BEGIN
     SET 
       UtcUpdated = _UtcDateTime,
       IsDeleted = _IsDeleted,
-      ParentId = _ParentId,
+      ParentId = Region_GetIdFromName(_ParentName),
       RegionType = _RegionType,
       EnglishName = _EnglishName,
       LocalName = _LocalName,
