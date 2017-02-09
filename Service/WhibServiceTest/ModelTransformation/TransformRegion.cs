@@ -19,14 +19,6 @@
       }
     }
 
-    internal static void BuildRegionLookup(List<WhibRegion> regionList, Dictionary<int, string> regionLookup)
-    {
-      foreach (WhibRegion region in regionList)
-      {
-        regionLookup.Add(region.Id, region.EnglishName);
-      }
-    }
-
     internal static void TransformRegions(Region region, List<WhibRegion> regionList, Dictionary<int, string> regionLookup)
     {
       if (region != null)
@@ -49,6 +41,23 @@
           TransformRegions(subRegion, regionList, regionLookup);
         }
       }
+    }
+
+    private static WhibRegionType ConvertRegionType(Region.RegionLevel regionLevel)
+    {
+      switch (regionLevel)
+      {
+        case Region.RegionLevel.World:
+          return WhibRegionType.World;
+        case Region.RegionLevel.Continent:
+          return WhibRegionType.Continent;
+        case Region.RegionLevel.Country:
+          return WhibRegionType.Country;
+        case Region.RegionLevel.SubNational:
+          return WhibRegionType.SubNational;
+      }
+
+      return WhibRegionType.Unknown;
     }
 
     private static string GetCode(string codeName, string codeList)
@@ -75,22 +84,5 @@
 
       return string.Empty;
     }
-
-    private static WhibRegionType ConvertRegionType(Region.RegionLevel regionLevel)
-    {
-      switch (regionLevel)
-      {
-        case Region.RegionLevel.World:
-          return WhibRegionType.World;
-        case Region.RegionLevel.Continent:
-          return WhibRegionType.Continent;
-        case Region.RegionLevel.Country:
-          return WhibRegionType.Country;
-        case Region.RegionLevel.SubNational:
-          return WhibRegionType.SubNational;
-      }
-
-      return WhibRegionType.Unknown;
-    }
-  }
+ }
 }

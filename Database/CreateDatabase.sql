@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Region (
     IsDeleted BIT NOT NULL,
     ParentId INT,
     RegionType TINYINT NOT NULL,
-    EnglishName NVARCHAR(200) NOT NULL UNIQUE,
+    EnglishName NVARCHAR(200) NOT NULL,
     LocalName NVARCHAR(200),
     IsoCode2 NCHAR(2),
     IsoCode3 NCHAR(3),
@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS Region (
     Capital_CityId INT,
     Largest_CityId INT
 );
+
+CREATE UNIQUE INDEX IX_Region ON Region (ParentId, EnglishName);
 
 CREATE TABLE IF NOT EXISTS Organisation (
     Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -95,6 +97,7 @@ DROP FUNCTION IF EXISTS `Region_GetIdFromName`|
 CREATE DEFINER=`root`@`localhost` FUNCTION `Region_GetIdFromName`(_Name NVARCHAR(200)) RETURNS INT
 BEGIN
 
+/* Note - names are not unique so this can fail if called in a couple of cases. */
 DECLARE _Id INT;
 SELECT 
   Id
@@ -112,13 +115,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `Region_Merge`(in _IsDeleted BIT, in
 BEGIN
   DECLARE _CurrentId INT;
   DECLARE _UtcDateTime DATETIME;
+  DECLARE _ParentId INT;
+  
+  SELECT Region_GetIdFromName(_ParentName) INTO _ParentId;
 
   SELECT 
     Id
   FROM
     Region
   WHERE
-    EnglishName = _EnglishName INTO _CurrentId;
+    ParentId = _ParentId AND EnglishName = _EnglishName INTO _CurrentId;
   
   SET _UtcDateTime = UTC_TIMESTAMP();
 
@@ -127,21 +133,21 @@ BEGIN
       INSERT INTO Region
       (UtcCreated, UtcUpdated, IsDeleted, ParentId, RegionType, EnglishName, LocalName, IsoCode2, IsoCode3, AreaSqKm, Population, Capital_CityId, Largest_CityId)
       VALUES
-      (_UtcDateTime, _UtcDateTime, _IsDeleted, Region_GetIdFromName(_ParentName), _RegionType, _EnglishName, _LocalName, _IsoCode2, _IsoCode3, _AreaSqKm, _Population, _Capital_CityId, _Largest_CityId);
+      (_UtcDateTime, _UtcDateTime, _IsDeleted, _ParentId, _RegionType, _EnglishName, _LocalName, _IsoCode2, _IsoCode3, _AreaSqKm, _Population, _Capital_CityId, _Largest_CityId);
     
       SELECT 
         Id
       FROM
         Region
       WHERE
-        EnglishName = _EnglishName INTO _CurrentId;
+        ParentId = _ParentId AND EnglishName = _EnglishName INTO _CurrentId;
     END;
   ELSE
     UPDATE Region
     SET 
       UtcUpdated = _UtcDateTime,
       IsDeleted = _IsDeleted,
-      ParentId = Region_GetIdFromName(_ParentName),
+      ParentId = _ParentId,
       RegionType = _RegionType,
       EnglishName = _EnglishName,
       LocalName = _LocalName,
@@ -159,13 +165,10 @@ END|
 
 DROP PROCEDURE IF EXISTS `City_Merge`|
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `City_Merge`(in _IsDeleted BIT, in _RegionName NVARCHAR(200), in _EnglishName NVARCHAR(200), in _LocalName NVARCHAR(200), in _Population BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `City_Merge`(in _IsDeleted BIT, in _RegionId INT, in _EnglishName NVARCHAR(200), in _LocalName NVARCHAR(200), in _Population BIGINT)
 BEGIN
   DECLARE _CurrentId INT;
   DECLARE _UtcDateTime DATETIME;
-  DECLARE _RegionId INT;
-  
-  SELECT Region_GetIdFromName(_RegionName) INTO _RegionId;
 
   SELECT 
     Id
