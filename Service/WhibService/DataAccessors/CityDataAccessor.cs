@@ -32,7 +32,7 @@
             city.RegionId = reader.GetInt32(2);
             city.EnglishName = reader.GetString(4);
             city.LocalName = reader.GetValue(5) == DBNull.Value ? (string)null : reader.GetString(5);
-            city.Population = reader.GetInt64(9);
+            city.Population = reader.GetInt64(6);
             cityList.Add(city);
           }
         }

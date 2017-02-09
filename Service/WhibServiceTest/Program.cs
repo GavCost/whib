@@ -1,37 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
-using WhibRegion = WhibService.Models.Region;
-using WhibRegionType = WhibService.Models.RegionType;
-
-namespace WhibServiceTest
+﻿namespace WhibServiceTest
 {
+  using System;
+  using System.Collections.Generic;
+  using System.IO;
+  using System.Linq;
+  using Newtonsoft.Json;
+  using WhibRegion = WhibService.Models.Region;
+  using WhibRegionType = WhibService.Models.RegionType;
+
   class Program
   {
     static void Main(string[] args)
     {
       // Load the test files and transform to Whib Regions.
-      Region world = LoadRegions();
+      Region world = XmlModelAccessor.LoadRegions();
+      Dictionary<int, string> cityList = new Dictionary<int, string>();
       Dictionary<int, string> regionLookup = new Dictionary<int, string>();
       List<WhibRegion> regionList = new List<WhibRegion>();
+      ////BuildCityList(world, cityList);
       BuildRegionLookup(world, regionLookup);
       TransformRegions(world, regionList, regionLookup);
       IEnumerable<WhibRegion> sortedRegions = regionList.OrderBy(x => x.RegionType).ThenBy(x => x.ParentName).ThenBy(x => x.EnglishName);
 
       // Feed them into the WebService to test.
+      ////foreach (var item in cityList)
+      ////{
+      ////  City city = new City()
+      ////  {
+      ////    RegionName = item.Key,
+      ////    EnglishName = item.Value,
+      ////  };
+      ////  CallPostCity(city);
+      ////}
+
       foreach (WhibRegion region in sortedRegions)
       {
-        CallWebService(region);
+        RegionApiCaller.CallPostRegion(region);
       }
+
+      List<WhibRegion> returnedRegionList = RegionApiCaller.CallGetRegions();
 
       SaveRegions(sortedRegions.ToList());
     }
+
+    ////private static void BuildCityList(Region region, Dictionary<int, string> cityList)
+    ////{
+    ////  if (region != null)
+    ////  {
+    ////    cityList.Add(region.Id, region.Capital);
+    ////    foreach (Region subRegion in region.SubRegionList)
+    ////    {
+    ////      BuildCityList(subRegion, cityList);
+    ////    }
+    ////  }
+    ////}
 
     private static void BuildRegionLookup(Region region, Dictionary<int, string> regionLookup)
     {
@@ -73,16 +95,19 @@ namespace WhibServiceTest
     {
       try
       {
-        codeList = codeList.Replace("),(", "~");
-        codeList = codeList.Replace("(", string.Empty);
-        codeList = codeList.Replace(")", string.Empty);
-        string[] codes = codeList.Split('~');
-
-        foreach (string code in codes)
+        if (codeList != null)
         {
-          if (code.StartsWith(codeName))
+          codeList = codeList.Replace("),(", "~");
+          codeList = codeList.Replace("(", string.Empty);
+          codeList = codeList.Replace(")", string.Empty);
+          string[] codes = codeList.Split('~');
+
+          foreach (string code in codes)
           {
-            return code.Split(',')[1];
+            if (code.StartsWith(codeName))
+            {
+              return code.Split(',')[1];
+            }
           }
         }
       }
@@ -108,25 +133,6 @@ namespace WhibServiceTest
       return WhibRegionType.Unknown;
     }
 
-    private static Region LoadRegions()
-    {
-      Region world = null;
-
-      try
-      {
-        Type[] subTypes = new Type[] { typeof(Statistic) };
-        XmlSerializer serializer = new XmlSerializer(typeof(Region), subTypes);
-        using (TextReader reader = new StreamReader(@"Data\Regions.xml"))
-        {
-          world = (Region)serializer.Deserialize(reader);
-        }
-      }
-      catch
-      { }
-
-      return world;
-    }
-
     private static void SaveRegions(List<WhibRegion> regionList)
     {
       try
@@ -136,37 +142,6 @@ namespace WhibServiceTest
       }
       catch
       { }
-    }
-
-    private static void CallWebService(WhibRegion region)
-    {
-      try
-      {
-        WebRequest request = WebRequest.Create("http://localhost:59998/api/Region");
-        request.Method = "POST";
-        request.ContentType = "application/json";
-
-        // Create the data we want to send
-        string json = JsonConvert.SerializeObject(region);
-        byte[] byteData = Encoding.UTF8.GetBytes(json);
-        request.ContentLength = byteData.Length;
-
-        // Write data to request
-        using (Stream postStream = request.GetRequestStream())
-        {
-          postStream.Write(byteData, 0, byteData.Length);
-        }
-
-        WebResponse response = request.GetResponse();
-
-        string result = "";
-        using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-        {
-          result = sr.ReadToEnd();
-          sr.Close();
-        }
-      }
-      catch { }
     }
   }
 }

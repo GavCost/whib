@@ -1,12 +1,8 @@
 ﻿namespace WhibServiceTest
 {
-  using System;
   using System.Collections.Generic;
   using System.ComponentModel;
   using System.Diagnostics;
-  using System.Linq;
-  using System.Text;
-  using System.Xml.Serialization;
 
   /// <summary>
   /// This class represents an region of the world, it could be the world itself, a continent, a country, or a region of a country.
