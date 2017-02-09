@@ -165,11 +165,14 @@ END|
 
 DROP PROCEDURE IF EXISTS `City_Merge`|
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `City_Merge`(in _IsDeleted BIT, in _RegionId INT, in _EnglishName NVARCHAR(200), in _LocalName NVARCHAR(200), in _Population BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `City_Merge`(in _IsDeleted BIT, in _RegionName NVARCHAR(200), in _EnglishName NVARCHAR(200), in _LocalName NVARCHAR(200), in _Population BIGINT)
 BEGIN
   DECLARE _CurrentId INT;
   DECLARE _UtcDateTime DATETIME;
-
+  DECLARE _RegionId INT;
+  
+  SELECT Region_GetIdFromName(_RegionName) INTO _RegionId;
+  
   SELECT 
     Id
   FROM
