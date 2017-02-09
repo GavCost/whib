@@ -5,7 +5,7 @@
   /// <summary>
   /// This class represents a city.
   /// </summary>
-  [DebuggerDisplay("Name = {EnglishName}, Id = {Id}")]
+  [DebuggerDisplay("Name = {EnglishName}, RegionName = {RegionName}, Id = {Id}")]
   public class City
   {
     public int Id { get; set; }

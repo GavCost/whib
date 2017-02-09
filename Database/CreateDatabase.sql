@@ -81,11 +81,11 @@ BEGIN
 
 DECLARE _Name NVARCHAR(200);
 SELECT 
-    EnglishName
+  EnglishName
 FROM
-    Region
+  Region
 WHERE
-    Id = _Id INTO _Name;
+  Id = _Id INTO _Name;
 
 RETURN _Name;
 END|
@@ -97,11 +97,11 @@ BEGIN
 
 DECLARE _Id INT;
 SELECT 
-    Id
+  Id
 FROM
-    Region
+  Region
 WHERE
-    EnglishName = _Name INTO _Id;
+  EnglishName = _Name INTO _Id;
 
 RETURN _Id;
 END|
@@ -129,12 +129,12 @@ BEGIN
       VALUES
       (_UtcDateTime, _UtcDateTime, _IsDeleted, Region_GetIdFromName(_ParentName), _RegionType, _EnglishName, _LocalName, _IsoCode2, _IsoCode3, _AreaSqKm, _Population, _Capital_CityId, _Largest_CityId);
     
-    SELECT 
-      Id
-    FROM
-      Region
-    WHERE
-      EnglishName = _EnglishName INTO _CurrentId;
+      SELECT 
+        Id
+      FROM
+        Region
+      WHERE
+        EnglishName = _EnglishName INTO _CurrentId;
     END;
   ELSE
     UPDATE Region
@@ -159,15 +159,18 @@ END|
 
 DROP PROCEDURE IF EXISTS `City_Merge`|
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `City_Merge`(in _IsDeleted BIT, in _RegionId INT, in _EnglishName NVARCHAR(200), in _LocalName NVARCHAR(200), in _Population BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `City_Merge`(in _IsDeleted BIT, in _RegionName NVARCHAR(200), in _EnglishName NVARCHAR(200), in _LocalName NVARCHAR(200), in _Population BIGINT)
 BEGIN
   DECLARE _CurrentId INT;
   DECLARE _UtcDateTime DATETIME;
+  DECLARE _RegionId INT;
+  
+  SELECT Region_GetIdFromName(_RegionName) INTO _RegionId;
 
   SELECT 
     Id
   FROM
-    Region
+    City
   WHERE
     RegionId = _RegionId AND EnglishName = _EnglishName INTO _CurrentId;
   
@@ -180,12 +183,12 @@ BEGIN
       VALUES
       (_UtcDateTime, _UtcDateTime, _IsDeleted, _RegionId, _EnglishName, _LocalName, _Population);
     
-    SELECT 
-      Id
-    FROM
-      Region
-    WHERE
-      RegionId = _RegionId AND EnglishName = _EnglishName INTO _CurrentId;
+      SELECT 
+        Id
+      FROM
+        City
+      WHERE
+        RegionId = _RegionId AND EnglishName = _EnglishName INTO _CurrentId;
     END;
   ELSE
     UPDATE City

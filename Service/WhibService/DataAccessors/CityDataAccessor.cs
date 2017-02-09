@@ -42,9 +42,7 @@
           connection.Close();
         }
       }
-      catch (MySqlException ex)
-      {
-      }
+      catch { }
       finally
       {
         if (connection != null && connection.State != ConnectionState.Closed)
@@ -72,7 +70,7 @@
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
             DataAccessorBase.AddBooleanParam(sqlCommand, "_IsDeleted", city.IsDeleted);
-            DataAccessorBase.AddInt32Param(sqlCommand, "_RegionId", city.RegionId);
+            DataAccessorBase.AddStringParam(sqlCommand, "_RegionName", 200, city.RegionName);
             DataAccessorBase.AddStringParam(sqlCommand, "_EnglishName", 200, city.EnglishName);
             DataAccessorBase.AddStringParam(sqlCommand, "_LocalName", 200, city.LocalName, DataAccessorBase.ParamConversionType.ConvertDefaultValueToNull);
             DataAccessorBase.AddInt64Param(sqlCommand, "_Population", city.Population);
@@ -86,9 +84,7 @@
           }
         }
       }
-      catch (MySqlException ex)
-      {
-      }
+      catch { }
       finally
       {
         if (connection != null && connection.State != ConnectionState.Closed)

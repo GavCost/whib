@@ -49,9 +49,7 @@
           connection.Close();
         }
       }
-      catch (MySqlException ex)
-      {
-      }
+      catch { }
       finally
       {
         if (connection != null && connection.State != ConnectionState.Closed)
@@ -99,9 +97,7 @@
           }
         }
       }
-      catch (MySqlException ex)
-      {
-      }
+      catch { }
       finally
       {
         if (connection != null && connection.State != ConnectionState.Closed)
