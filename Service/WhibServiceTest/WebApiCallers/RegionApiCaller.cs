@@ -40,6 +40,32 @@
       return regionList;
     }
 
+    internal static WhibRegion CallGetRegion(int id)
+    {
+      WhibRegion region = null;
+
+      try
+      {
+        WebRequest request = WebRequest.Create(string.Format("http://localhost:59998/api/Region/{0}", id));
+        request.Method = "GET";
+        request.ContentType = "application/json";
+
+        WebResponse response = request.GetResponse();
+
+        string result = string.Empty;
+        using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+        {
+          result = sr.ReadToEnd();
+          sr.Close();
+        }
+
+        region = JsonConvert.DeserializeObject<WhibRegion>(result);
+      }
+      catch { }
+
+      return region;
+    }
+
     internal static void CallPostRegion(WhibRegion region)
     {
       try

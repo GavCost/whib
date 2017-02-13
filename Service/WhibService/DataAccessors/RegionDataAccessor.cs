@@ -26,21 +26,7 @@
 
           while (reader.Read())
           {
-            Region region = new Region();
-            region.Id = reader.GetInt32(0);
-            region.IsDeleted = reader.GetBoolean(1);
-            region.ParentId = reader.GetValue(2) == DBNull.Value ? (int?)null : reader.GetInt32(2);
-            region.ParentName = reader.GetValue(3) == DBNull.Value ? (string)null : reader.GetString(3);
-            region.RegionType = (RegionType)reader.GetByte(4);
-            region.EnglishName = reader.GetString(5);
-            region.LocalName = reader.GetValue(6) == DBNull.Value ? (string)null : reader.GetString(6);
-            region.IsoCode2 = reader.GetValue(7) == DBNull.Value ? (string)null : reader.GetString(7);
-            region.IsoCode3 = reader.GetValue(8) == DBNull.Value ? (string)null : reader.GetString(8);
-            region.AreaSqKm = reader.GetDecimal(9);
-            region.Population = reader.GetInt64(10);
-            region.Capital_CityId = reader.GetValue(11) == DBNull.Value ? (int?)null : reader.GetInt32(11);
-            region.Largest_CityId = reader.GetValue(12) == DBNull.Value ? (int?)null : reader.GetInt32(12);
-            regionList.Add(region);
+            regionList.Add(PopulateRegionFromReader(reader));
           }
         }
 
@@ -59,6 +45,45 @@
       }
 
       return regionList;
+    }
+
+    public static Region GetRegion(int id)
+    {
+      Region region = null;
+      MySqlConnection connection = null;
+
+      try
+      {
+        using (connection = new MySqlConnection(DataAccessorBase.ConnectionString))
+        {
+          connection.Open();
+
+          string querySql = string.Format("SELECT Id, IsDeleted, ParentId, Region_GetNameFromId(ParentId) AS ParentName, RegionType, EnglishName, LocalName, IsoCode2, IsoCode3, AreaSqKm, Population, Capital_CityId, Largest_CityId FROM Region WHERE Id = {0};", id);
+          MySqlCommand sqlCommand = new MySqlCommand(querySql, connection);
+
+          MySqlDataReader reader = sqlCommand.ExecuteReader();
+
+          while (reader.Read())
+          {
+            region = PopulateRegionFromReader(reader);
+          }
+        }
+
+        if (connection.State != ConnectionState.Closed)
+        {
+          connection.Close();
+        }
+      }
+      catch { }
+      finally
+      {
+        if (connection != null && connection.State != ConnectionState.Closed)
+        {
+          connection.Close();
+        }
+      }
+
+      return region;
     }
 
     public static void MergeRegion(Region region)
@@ -104,6 +129,32 @@
         {
           connection.Close();
         }
+      }
+    }
+
+    private static Region PopulateRegionFromReader(MySqlDataReader reader)
+    {
+      if (reader.GetValue(0) == DBNull.Value)
+      {
+        return null;
+      }
+      else
+      {
+        Region region = new Region();
+        region.Id = reader.GetInt32(0);
+        region.IsDeleted = reader.GetBoolean(1);
+        region.ParentId = reader.GetValue(2) == DBNull.Value ? (int?)null : reader.GetInt32(2);
+        region.ParentName = reader.GetValue(3) == DBNull.Value ? (string)null : reader.GetString(3);
+        region.RegionType = (RegionType)reader.GetByte(4);
+        region.EnglishName = reader.GetString(5);
+        region.LocalName = reader.GetValue(6) == DBNull.Value ? (string)null : reader.GetString(6);
+        region.IsoCode2 = reader.GetValue(7) == DBNull.Value ? (string)null : reader.GetString(7);
+        region.IsoCode3 = reader.GetValue(8) == DBNull.Value ? (string)null : reader.GetString(8);
+        region.AreaSqKm = reader.GetDecimal(9);
+        region.Population = reader.GetInt64(10);
+        region.Capital_CityId = reader.GetValue(11) == DBNull.Value ? (int?)null : reader.GetInt32(11);
+        region.Largest_CityId = reader.GetValue(12) == DBNull.Value ? (int?)null : reader.GetInt32(12);
+        return region;
       }
     }
   }

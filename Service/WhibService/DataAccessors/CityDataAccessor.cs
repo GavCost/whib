@@ -30,9 +30,9 @@
             city.Id = reader.GetInt32(0);
             city.IsDeleted = reader.GetBoolean(1);
             city.RegionId = reader.GetInt32(2);
-            city.EnglishName = reader.GetString(4);
-            city.LocalName = reader.GetValue(5) == DBNull.Value ? (string)null : reader.GetString(5);
-            city.Population = reader.GetInt64(6);
+            city.EnglishName = reader.GetString(3);
+            city.LocalName = reader.GetValue(4) == DBNull.Value ? (string)null : reader.GetString(5);
+            city.Population = reader.GetInt64(5);
             cityList.Add(city);
           }
         }

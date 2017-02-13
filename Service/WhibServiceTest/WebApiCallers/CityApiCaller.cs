@@ -1,13 +1,45 @@
 ﻿namespace WhibServiceTest
 {
+  using System.Collections.Generic;
   using System.IO;
   using System.Net;
   using System.Text;
   using Newtonsoft.Json;
+  using Newtonsoft.Json.Linq;
   using WhibService.Models;
 
   internal class CityApiCaller
   {
+    internal static List<City> CallGetCities()
+    {
+      List<City> cityList = new List<City>();
+
+      try
+      {
+        WebRequest request = WebRequest.Create("http://localhost:59998/api/City");
+        request.Method = "GET";
+        request.ContentType = "application/json";
+
+        WebResponse response = request.GetResponse();
+
+        string result = string.Empty;
+        using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+        {
+          result = sr.ReadToEnd();
+          sr.Close();
+        }
+
+        JArray jsonList = (JArray)JsonConvert.DeserializeObject(result);
+        foreach (var item in jsonList)
+        {
+          cityList.Add(item.ToObject<City>());
+        }
+      }
+      catch { }
+
+      return cityList;
+    }
+
     internal static void CallPostCity(City city)
     {
       try

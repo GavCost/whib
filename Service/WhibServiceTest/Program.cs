@@ -16,8 +16,18 @@
       // Test the getting of the regions.
       TestGetRegions(regionsPosted);
 
+      // Test the getting of individual regions.
+      TestGetRegion(1, true);
+      TestGetRegion(2, true);
+      TestGetRegion(regionsPosted, true);
+      TestGetRegion(0, false);
+      TestGetRegion(-1, false);
+      TestGetRegion(regionsPosted + 1, false);
+
       // Test the posting of cities.
       int citiesPosted = TestPostCities();
+
+      TestGetCities(citiesPosted);
     }
 
     private static int TestPostRegions()
@@ -46,12 +56,26 @@
     private static void TestGetRegions(int regionCount)
     {
       List<WhibRegion> returnedRegionList = RegionApiCaller.CallGetRegions();
-      //if (returnedRegionList.Count != regionCount)
-      //{
-      //  throw new ApplicationException("Mismatch in region count.");
-      //}
+      if (returnedRegionList.Count != regionCount)
+      {
+        throw new ApplicationException("Mismatch in region count.");
+      }
 
       JsonModelAccessor.SaveRegions(returnedRegionList, 2);
+    }
+
+    private static void TestGetRegion(int id, bool expectResponse)
+    {
+      WhibRegion returnedRegion = RegionApiCaller.CallGetRegion(id);
+
+      if (expectResponse && returnedRegion == null)
+      {
+        throw new ApplicationException(string.Format("Failed to find expected region for id {0}.", id));
+      }
+      else if (!expectResponse && returnedRegion != null)
+      {
+        throw new ApplicationException(string.Format("Found unexpected region for id {0}.", id));
+      }
     }
 
     private static int TestPostCities()
@@ -70,6 +94,17 @@
 
       JsonModelAccessor.SaveCities(cityList, 1);
       return cityList.Count();
+    }
+
+    private static void TestGetCities(int cityCount)
+    {
+      List<City> returnedCityList = CityApiCaller.CallGetCities();
+      if (returnedCityList.Count != cityCount)
+      {
+        throw new ApplicationException("Mismatch in city count.");
+      }
+
+      JsonModelAccessor.SaveCities(returnedCityList, 2);
     }
   }
 }

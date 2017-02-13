@@ -13,17 +13,11 @@
       return RegionDataAccessor.GetRegions();
     }
 
-    ////// GET: api/Region/5
-    ////public Region Get(string name)
-    ////{
-    ////  return new Region()
-    ////  {
-    ////    EnglishName = "Test",
-    ////    LocalName = "Testski",
-    ////    AreaSqKm = 123.45M,
-    ////    Population = 67890,
-    ////  };
-    ////}
+    // GET: api/Region/5
+    public Region Get(int id)
+    {
+      return RegionDataAccessor.GetRegion(id);
+    }
 
     // POST: api/Region
     public void Post([FromBody]Region value)
@@ -31,10 +25,11 @@
       RegionDataAccessor.MergeRegion(value);
     }
 
-    ////// PUT: api/Region/5
-    ////public void Put(string name, [FromBody]string value)
-    ////{
-    ////}
+    // PUT: api/Region/5
+    public void Put(int id, [FromBody]Region value)
+    {
+      RegionDataAccessor.MergeRegion(value);
+    }
 
     ////// DELETE: api/Region/5
     ////public void Delete(string name)
