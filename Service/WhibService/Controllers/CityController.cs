@@ -1,5 +1,6 @@
 ﻿namespace WhibService.Controllers
 {
+  using System;
   using System.Collections.Generic;
   using System.Web.Http;
   using WhibService.DataAccessors;
@@ -25,10 +26,18 @@
       CityDataAccessor.MergeCity(value);
     }
 
-    ////// PUT: api/City/5
-    ////public void Put(string name, [FromBody]string value)
-    ////{
-    ////}
+    // PUT: api/City/5
+    public void Put(int id, [FromBody]City value)
+    {
+      City returnedCity = CityDataAccessor.GetCity(id);
+
+      if (returnedCity == null)
+      {
+        throw new ApplicationException("Item does not exist.");
+      }
+
+      CityDataAccessor.MergeCity(value);
+    }
 
     ////// DELETE: api/City/5
     ////public void Delete(string name)

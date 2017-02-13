@@ -6,8 +6,15 @@
   using MySql.Data.MySqlClient;
   using WhibService.Models;
 
+  /// <summary>
+  /// This class provides access to the city table in the database.
+  /// </summary>
   public static class CityDataAccessor
   {
+    /// <summary>
+    /// Returns the list of all cities from the database.
+    /// </summary>
+    /// <returns>A list of all the cities from the database.</returns>
     public static IEnumerable<City> GetCities()
     {
       List<City> cityList = new List<City>();
@@ -51,6 +58,11 @@
       return cityList;
     }
 
+    /// <summary>
+    /// Returns an individual city with the given id number.
+    /// </summary>
+    /// <param name="id">The id number of the city to be returned.</param>
+    /// <returns>The city for the given id number, or null if not found.</returns>
     public static City GetCity(int id)
     {
       City city = null;
@@ -90,6 +102,10 @@
       return city;
     }
 
+    /// <summary>
+    /// Calls the merge stored procedure to insert or update a city as required.
+    /// </summary>
+    /// <param name="city">The city to be merged into the database.</param>
     public static void MergeCity(City city)
     {
       MySqlConnection connection = null;
@@ -130,6 +146,11 @@
       }
     }
 
+    /// <summary>
+    /// Creates and populates a city object from a database reader.
+    /// </summary>
+    /// <param name="reader">The reader object to get the field information from.</param>
+    /// <returns>A city object, or null if there is no object (if the Id field is null).</returns>
     private static City PopulateCityFromReader(MySqlDataReader reader)
     {
       if (reader.GetValue(0) == DBNull.Value)

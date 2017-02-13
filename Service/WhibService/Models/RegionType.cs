@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace WhibService.Models
+﻿namespace WhibService.Models
 {
+  using System;
+
   /// <summary>
   /// This enum represents the types of regions.
   /// </summary>

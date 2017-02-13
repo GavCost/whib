@@ -6,8 +6,15 @@
   using MySql.Data.MySqlClient;
   using WhibService.Models;
 
+  /// <summary>
+  /// This class provides access to the region table in the database.
+  /// </summary>
   public static class RegionDataAccessor
   {
+    /// <summary>
+    /// Returns the list of all regions from the database.
+    /// </summary>
+    /// <returns>A list of all the regions from the database.</returns>
     public static IEnumerable<Region> GetRegions()
     {
       List<Region> regionList = new List<Region>();
@@ -51,6 +58,11 @@
       return regionList;
     }
 
+    /// <summary>
+    /// Returns an individual region with the given id number.
+    /// </summary>
+    /// <param name="id">The id number of the region to be returned.</param>
+    /// <returns>The region for the given id number, or null if not found.</returns>
     public static Region GetRegion(int id)
     {
       Region region = null;
@@ -90,6 +102,10 @@
       return region;
     }
 
+    /// <summary>
+    /// Calls the merge stored procedure to insert or update a region as required.
+    /// </summary>
+    /// <param name="region">The region to be merged into the database.</param>
     public static void MergeRegion(Region region)
     {
       MySqlConnection connection = null;
@@ -136,6 +152,11 @@
       }
     }
 
+    /// <summary>
+    /// Creates and populates a region object from a database reader.
+    /// </summary>
+    /// <param name="reader">The reader object to get the field information from.</param>
+    /// <returns>A region object, or null if there is no object (if the Id field is null).</returns>
     private static Region PopulateRegionFromReader(MySqlDataReader reader)
     {
       if (reader.GetValue(0) == DBNull.Value)
