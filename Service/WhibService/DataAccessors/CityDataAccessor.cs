@@ -26,14 +26,11 @@
 
           while (reader.Read())
           {
-            City city = new City();
-            city.Id = reader.GetInt32(0);
-            city.IsDeleted = reader.GetBoolean(1);
-            city.RegionId = reader.GetInt32(2);
-            city.EnglishName = reader.GetString(3);
-            city.LocalName = reader.GetValue(4) == DBNull.Value ? (string)null : reader.GetString(5);
-            city.Population = reader.GetInt64(5);
-            cityList.Add(city);
+            City city = PopulateCityFromReader(reader);
+            if (city != null)
+            {
+              cityList.Add(city);
+            }
           }
         }
 
@@ -52,6 +49,45 @@
       }
 
       return cityList;
+    }
+
+    public static City GetCity(int id)
+    {
+      City city = null;
+      MySqlConnection connection = null;
+
+      try
+      {
+        using (connection = new MySqlConnection(DataAccessorBase.ConnectionString))
+        {
+          connection.Open();
+
+          string querySql = string.Format("SELECT Id, IsDeleted, RegionId, EnglishName, LocalName, Population FROM City WHERE Id = {0};", id);
+          MySqlCommand sqlCommand = new MySqlCommand(querySql, connection);
+
+          MySqlDataReader reader = sqlCommand.ExecuteReader();
+
+          while (reader.Read())
+          {
+            city = PopulateCityFromReader(reader);
+          }
+        }
+
+        if (connection.State != ConnectionState.Closed)
+        {
+          connection.Close();
+        }
+      }
+      catch { }
+      finally
+      {
+        if (connection != null && connection.State != ConnectionState.Closed)
+        {
+          connection.Close();
+        }
+      }
+
+      return city;
     }
 
     public static void MergeCity(City city)
@@ -91,6 +127,25 @@
         {
           connection.Close();
         }
+      }
+    }
+
+    private static City PopulateCityFromReader(MySqlDataReader reader)
+    {
+      if (reader.GetValue(0) == DBNull.Value)
+      {
+        return null;
+      }
+      else
+      {
+        City city = new City();
+        city.Id = reader.GetInt32(0);
+        city.IsDeleted = reader.GetBoolean(1);
+        city.RegionId = reader.GetInt32(2);
+        city.EnglishName = reader.GetString(3);
+        city.LocalName = reader.GetValue(4) == DBNull.Value ? (string)null : reader.GetString(5);
+        city.Population = reader.GetInt64(5);
+        return city;
       }
     }
   }

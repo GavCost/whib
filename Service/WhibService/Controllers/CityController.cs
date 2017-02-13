@@ -13,17 +13,11 @@
       return CityDataAccessor.GetCities();
     }
 
-    ////// GET: api/City/5
-    ////public City Get(string name)
-    ////{
-    ////  return new City()
-    ////  {
-    ////    EnglishName = "Test",
-    ////    LocalName = "Testski",
-    ////    AreaSqKm = 123.45M,
-    ////    Population = 67890,
-    ////  };
-    ////}
+    // GET: api/City/5
+    public City Get(int id)
+    {
+      return CityDataAccessor.GetCity(id);
+    }
 
     // POST: api/City
     public void Post([FromBody]City value)

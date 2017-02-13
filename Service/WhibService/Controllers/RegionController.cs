@@ -1,5 +1,6 @@
 ﻿namespace WhibService.Controllers
 {
+  using System;
   using System.Collections.Generic;
   using System.Web.Http;
   using WhibService.DataAccessors;
@@ -28,6 +29,13 @@
     // PUT: api/Region/5
     public void Put(int id, [FromBody]Region value)
     {
+      Region returnedRegion = RegionDataAccessor.GetRegion(id);
+
+      if (returnedRegion == null)
+      {
+        throw new ApplicationException("Item does not exist.");
+      }
+
       RegionDataAccessor.MergeRegion(value);
     }
 

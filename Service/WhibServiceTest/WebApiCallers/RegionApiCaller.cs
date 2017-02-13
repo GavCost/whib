@@ -96,5 +96,36 @@
       }
       catch { }
     }
+
+    internal static void CallPutRegion(WhibRegion region)
+    {
+      try
+      {
+        WebRequest request = WebRequest.Create(string.Format("http://localhost:59998/api/Region/{0}", region.Id));
+        request.Method = "PUT";
+        request.ContentType = "application/json";
+
+        // Create the data we want to send
+        string json = JsonConvert.SerializeObject(region);
+        byte[] byteData = Encoding.UTF8.GetBytes(json);
+        request.ContentLength = byteData.Length;
+
+        // Write data to request
+        using (Stream postStream = request.GetRequestStream())
+        {
+          postStream.Write(byteData, 0, byteData.Length);
+        }
+
+        WebResponse response = request.GetResponse();
+
+        string result = "";
+        using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+        {
+          result = sr.ReadToEnd();
+          sr.Close();
+        }
+      }
+      catch { }
+    }
   }
 }

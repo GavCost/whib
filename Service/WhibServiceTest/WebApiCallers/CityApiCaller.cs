@@ -40,6 +40,32 @@
       return cityList;
     }
 
+    internal static City CallGetCity(int id)
+    {
+      City city = null;
+
+      try
+      {
+        WebRequest request = WebRequest.Create(string.Format("http://localhost:59998/api/City/{0}", id));
+        request.Method = "GET";
+        request.ContentType = "application/json";
+
+        WebResponse response = request.GetResponse();
+
+        string result = string.Empty;
+        using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+        {
+          result = sr.ReadToEnd();
+          sr.Close();
+        }
+
+        city = JsonConvert.DeserializeObject<City>(result);
+      }
+      catch { }
+
+      return city;
+    }
+
     internal static void CallPostCity(City city)
     {
       try

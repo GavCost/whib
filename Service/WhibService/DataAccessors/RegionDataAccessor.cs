@@ -26,7 +26,11 @@
 
           while (reader.Read())
           {
-            regionList.Add(PopulateRegionFromReader(reader));
+            Region region = PopulateRegionFromReader(reader);
+            if (region != null)
+            {
+              regionList.Add(region);
+            }
           }
         }
 

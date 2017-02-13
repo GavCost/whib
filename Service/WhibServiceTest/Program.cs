@@ -27,7 +27,19 @@
       // Test the posting of cities.
       int citiesPosted = TestPostCities();
 
+      // Test the getting of cities.
       TestGetCities(citiesPosted);
+
+      // Test the getting of individual cities.
+      TestGetCity(1, true);
+      TestGetCity(2, true);
+      TestGetCity(citiesPosted, true);
+      TestGetCity(0, false);
+      TestGetCity(-1, false);
+      TestGetCity(citiesPosted + 1, false);
+
+      // Now we have cities and regions in there, update the regions to have their capital cities.
+      TestPutRegions();
     }
 
     private static int TestPostRegions()
@@ -78,6 +90,26 @@
       }
     }
 
+    private static void TestPutRegions()
+    {
+      List<WhibRegion> returnedRegionList = RegionApiCaller.CallGetRegions();
+      List<City> returnedCityList = CityApiCaller.CallGetCities();
+
+      foreach (WhibRegion region in returnedRegionList)
+      {
+        City city = returnedCityList.FirstOrDefault(x => x.RegionId == region.Id);
+
+        if (city != null)
+        {
+          region.Capital_CityId = city.Id;
+          RegionApiCaller.CallPutRegion(region);
+        }
+      }
+
+      returnedRegionList = RegionApiCaller.CallGetRegions();
+      JsonModelAccessor.SaveRegions(returnedRegionList, 3);
+    }
+
     private static int TestPostCities()
     {
       // Load the regions from the Xml file and the database.
@@ -105,6 +137,20 @@
       }
 
       JsonModelAccessor.SaveCities(returnedCityList, 2);
+    }
+
+    private static void TestGetCity(int id, bool expectResponse)
+    {
+      City returnedCity = CityApiCaller.CallGetCity(id);
+
+      if (expectResponse && returnedCity == null)
+      {
+        throw new ApplicationException(string.Format("Failed to find expected city for id {0}.", id));
+      }
+      else if (!expectResponse && returnedCity != null)
+      {
+        throw new ApplicationException(string.Format("Found unexpected city for id {0}.", id));
+      }
     }
   }
 }
