@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhibService", "WhibService\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhibServiceTest", "WhibServiceTest\WhibServiceTest.csproj", "{F58D3051-17D9-4DCF-B159-6BD45A0C2E92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhibManager", "WhibManager\WhibManager.csproj", "{24EE2490-687A-40F9-81AA-7F9A06B87E33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhibModel", "WhibModel\WhibModel.csproj", "{474900F3-8254-4D69-A9FD-44989AF3AED5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{F58D3051-17D9-4DCF-B159-6BD45A0C2E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F58D3051-17D9-4DCF-B159-6BD45A0C2E92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F58D3051-17D9-4DCF-B159-6BD45A0C2E92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24EE2490-687A-40F9-81AA-7F9A06B87E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24EE2490-687A-40F9-81AA-7F9A06B87E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24EE2490-687A-40F9-81AA-7F9A06B87E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24EE2490-687A-40F9-81AA-7F9A06B87E33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{474900F3-8254-4D69-A9FD-44989AF3AED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{474900F3-8254-4D69-A9FD-44989AF3AED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{474900F3-8254-4D69-A9FD-44989AF3AED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{474900F3-8254-4D69-A9FD-44989AF3AED5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

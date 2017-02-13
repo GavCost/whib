@@ -3,8 +3,8 @@
   using System;
   using System.Collections.Generic;
   using System.Linq;
-  using WhibService.Models;
-  using WhibRegion = WhibService.Models.Region;
+  using WhibModel;
+  using WhibRegion = WhibModel.Region;
 
   class Program
   {

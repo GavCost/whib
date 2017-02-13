@@ -1,4 +1,4 @@
-﻿namespace WhibService.Models
+﻿namespace WhibModel
 {
   using System.Diagnostics;
 

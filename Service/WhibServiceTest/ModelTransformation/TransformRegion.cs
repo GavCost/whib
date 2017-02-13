@@ -2,8 +2,8 @@
 {
   using System;
   using System.Collections.Generic;
-  using WhibRegion = WhibService.Models.Region;
-  using WhibRegionType = WhibService.Models.RegionType;
+  using WhibRegion = WhibModel.Region;
+  using WhibRegionType = WhibModel.RegionType;
 
   internal static class TransformRegion
   {

@@ -1,7 +1,7 @@
 ﻿namespace WhibServiceTest
 {
   using System.Collections.Generic;
-  using WhibService.Models;
+  using WhibModel;
 
   internal static class TransformCity
   {

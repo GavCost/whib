@@ -6,7 +6,7 @@
   using System.Text;
   using Newtonsoft.Json;
   using Newtonsoft.Json.Linq;
-  using WhibService.Models;
+  using WhibModel;
 
   internal class CityApiCaller
   {

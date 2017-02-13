@@ -4,7 +4,7 @@
   using System.Collections.Generic;
   using System.Web.Http;
   using WhibService.DataAccessors;
-  using WhibService.Models;
+  using WhibModel;
 
   public class RegionController : ApiController
   {

@@ -3,8 +3,8 @@
   using System.Collections.Generic;
   using System.IO;
   using Newtonsoft.Json;
-  using WhibService.Models;
-  using WhibRegion = WhibService.Models.Region;
+  using WhibModel;
+  using WhibRegion = WhibModel.Region;
 
   internal static class JsonModelAccessor
   {

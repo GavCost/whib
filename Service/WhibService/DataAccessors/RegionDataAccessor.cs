@@ -4,7 +4,7 @@
   using System.Collections.Generic;
   using System.Data;
   using MySql.Data.MySqlClient;
-  using WhibService.Models;
+  using WhibModel;
 
   /// <summary>
   /// This class provides access to the region table in the database.

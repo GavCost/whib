@@ -6,7 +6,7 @@
   using System.Text;
   using Newtonsoft.Json;
   using Newtonsoft.Json.Linq;
-  using WhibRegion = WhibService.Models.Region;
+  using WhibRegion = WhibModel.Region;
 
   internal class RegionApiCaller
   {
