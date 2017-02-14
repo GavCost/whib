@@ -109,6 +109,22 @@ WHERE
 RETURN _Id;
 END|
 
+DROP FUNCTION IF EXISTS `City_GetNameFromId`|
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `City_GetNameFromId`(_Id INT) RETURNS NVARCHAR(200)
+BEGIN
+
+DECLARE _Name NVARCHAR(200);
+SELECT 
+  EnglishName
+FROM
+  City
+WHERE
+  Id = _Id INTO _Name;
+
+RETURN _Name;
+END|
+
 DROP PROCEDURE IF EXISTS `Region_Merge`|
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `Region_Merge`(in _IsDeleted BIT, in _ParentName NVARCHAR(200), in _RegionType TINYINT, in _EnglishName NVARCHAR(200), in _LocalName NVARCHAR(200), in _IsoCode2 CHAR(2), in _IsoCode3 CHAR(3), in _AreaSqKm DECIMAL(15 , 3 ), in _Population BIGINT, in _Capital_CityId INT, in _Largest_CityId INT)

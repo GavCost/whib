@@ -1,5 +1,6 @@
 ﻿namespace WhibModel
 {
+  using System.Collections.Generic;
   using System.Diagnostics;
 
   /// <summary>
@@ -38,5 +39,9 @@
     public int? Largest_CityId { get; set; }
 
     public string Largest_CityName { get; set; }
+
+    public List<Region> SubRegions { get; set; }
+
+    public List<City> Cities { get; set; }
   }
 }

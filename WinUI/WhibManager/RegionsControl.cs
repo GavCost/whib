@@ -119,6 +119,7 @@
         string nodeName = e.Node.Name;
         int id = int.Parse(nodeName);
         Region region = LoadRegion(id);
+        ctlRegion.SetRegion(region);
       }
       catch { }
     }

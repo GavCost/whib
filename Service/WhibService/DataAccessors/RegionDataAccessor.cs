@@ -3,6 +3,7 @@
   using System;
   using System.Collections.Generic;
   using System.Data;
+  using System.Linq;
   using MySql.Data.MySqlClient;
   using WhibModel;
 
@@ -12,50 +13,29 @@
   public static class RegionDataAccessor
   {
     /// <summary>
+    /// The list of fields that are read back from the database for a region.
+    /// </summary>
+    private const string FieldList = "SELECT Id, IsDeleted, ParentId, Region_GetNameFromId(ParentId) AS ParentName, RegionType, EnglishName, LocalName, IsoCode2, IsoCode3, AreaSqKm, Population, Capital_CityId, City_GetNameFromId(Capital_CityId) AS Capital_CityName, Largest_CityId, City_GetNameFromId(Largest_CityId) AS Largest_CityName FROM Region";
+
+    /// <summary>
     /// Returns the list of all regions from the database.
     /// </summary>
     /// <returns>A list of all the regions from the database.</returns>
     public static IEnumerable<Region> GetRegions()
     {
-      List<Region> regionList = new List<Region>();
-      MySqlConnection connection = null;
+      string querySql = string.Format("{0};", FieldList);
+      return ExecuteSelectRegion(querySql);
+    }
 
-      try
-      {
-        using (connection = new MySqlConnection(DataAccessorBase.ConnectionString))
-        {
-          connection.Open();
-
-          string querySql = "SELECT Id, IsDeleted, ParentId, Region_GetNameFromId(ParentId) AS ParentName, RegionType, EnglishName, LocalName, IsoCode2, IsoCode3, AreaSqKm, Population, Capital_CityId, Largest_CityId FROM Region;";
-          MySqlCommand sqlCommand = new MySqlCommand(querySql, connection);
-
-          MySqlDataReader reader = sqlCommand.ExecuteReader();
-
-          while (reader.Read())
-          {
-            Region region = PopulateRegionFromReader(reader);
-            if (region != null)
-            {
-              regionList.Add(region);
-            }
-          }
-        }
-
-        if (connection.State != ConnectionState.Closed)
-        {
-          connection.Close();
-        }
-      }
-      catch { }
-      finally
-      {
-        if (connection != null && connection.State != ConnectionState.Closed)
-        {
-          connection.Close();
-        }
-      }
-
-      return regionList;
+    /// <summary>
+    /// Returns the list of all regions from the database for a given region id.
+    /// </summary>
+    /// <param name="parentId">The region id to get the list for.</param>
+    /// <returns>A list of all the cities from the database.</returns>
+    public static IEnumerable<Region> GetRegionsByParentId(int parentId)
+    {
+      string querySql = string.Format("{0} WHERE ParentId = {1};", FieldList, parentId);
+      return ExecuteSelectRegion(querySql);
     }
 
     /// <summary>
@@ -66,38 +46,26 @@
     public static Region GetRegion(int id)
     {
       Region region = null;
-      MySqlConnection connection = null;
 
       try
       {
-        using (connection = new MySqlConnection(DataAccessorBase.ConnectionString))
+        string querySql = string.Format("{0} WHERE Id = {1};", FieldList, id);
+        IEnumerable<Region> regionList = ExecuteSelectRegion(querySql);
+        if (regionList == null || regionList.FirstOrDefault() == null || regionList.Count() > 1)
         {
-          connection.Open();
-
-          string querySql = string.Format("SELECT Id, IsDeleted, ParentId, Region_GetNameFromId(ParentId) AS ParentName, RegionType, EnglishName, LocalName, IsoCode2, IsoCode3, AreaSqKm, Population, Capital_CityId, Largest_CityId FROM Region WHERE Id = {0};", id);
-          MySqlCommand sqlCommand = new MySqlCommand(querySql, connection);
-
-          MySqlDataReader reader = sqlCommand.ExecuteReader();
-
-          while (reader.Read())
-          {
-            region = PopulateRegionFromReader(reader);
-          }
+          return null;
         }
-
-        if (connection.State != ConnectionState.Closed)
+        else
         {
-          connection.Close();
+          region = regionList.First();
+
+          // In these cases we get the list of sub-regions for a region and the list of cities.
+          region.SubRegions = GetRegionsByParentId(region.Id).ToList();
+          region.Cities = CityDataAccessor.GetCitiesByRegionId(region.Id).ToList();
+          return region;
         }
       }
       catch { }
-      finally
-      {
-        if (connection != null && connection.State != ConnectionState.Closed)
-        {
-          connection.Close();
-        }
-      }
 
       return region;
     }
@@ -153,6 +121,51 @@
     }
 
     /// <summary>
+    /// Returns a list of all regions from the database.
+    /// </summary>
+    /// <param name="querySql">The sql to get the regions from the database.</param>
+    /// <returns>A list of all the regions from the database for the given query.</returns>
+    private static IEnumerable<Region> ExecuteSelectRegion(string querySql)
+    {
+      List<Region> regionList = new List<Region>();
+      MySqlConnection connection = null;
+
+      try
+      {
+        using (connection = new MySqlConnection(DataAccessorBase.ConnectionString))
+        {
+          connection.Open();
+          MySqlCommand sqlCommand = new MySqlCommand(querySql, connection);
+          MySqlDataReader reader = sqlCommand.ExecuteReader();
+
+          while (reader.Read())
+          {
+            Region region = PopulateRegionFromReader(reader);
+            if (region != null)
+            {
+              regionList.Add(region);
+            }
+          }
+        }
+
+        if (connection.State != ConnectionState.Closed)
+        {
+          connection.Close();
+        }
+      }
+      catch { }
+      finally
+      {
+        if (connection != null && connection.State != ConnectionState.Closed)
+        {
+          connection.Close();
+        }
+      }
+
+      return regionList;
+    }
+
+    /// <summary>
     /// Creates and populates a region object from a database reader.
     /// </summary>
     /// <param name="reader">The reader object to get the field information from.</param>
@@ -178,7 +191,9 @@
         region.AreaSqKm = reader.GetDecimal(9);
         region.Population = reader.GetInt64(10);
         region.Capital_CityId = reader.GetValue(11) == DBNull.Value ? (int?)null : reader.GetInt32(11);
-        region.Largest_CityId = reader.GetValue(12) == DBNull.Value ? (int?)null : reader.GetInt32(12);
+        region.Capital_CityName = reader.GetValue(12) == DBNull.Value ? (string)null : reader.GetString(12);
+        region.Largest_CityId = reader.GetValue(13) == DBNull.Value ? (int?)null : reader.GetInt32(13);
+        region.Largest_CityName = reader.GetValue(14) == DBNull.Value ? (string)null : reader.GetString(14);
         return region;
       }
     }

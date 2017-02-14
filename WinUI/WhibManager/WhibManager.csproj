@@ -50,6 +50,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CitiesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CitiesControl.Designer.cs">
+      <DependentUpon>CitiesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CityControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CityControl.Designer.cs">
+      <DependentUpon>CityControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="RegionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -70,6 +82,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CitiesControl.resx">
+      <DependentUpon>CitiesControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CityControl.resx">
+      <DependentUpon>CityControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RegionControl.resx">
       <DependentUpon>RegionControl.cs</DependentUpon>
     </EmbeddedResource>

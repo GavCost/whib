@@ -3,6 +3,7 @@
   using System;
   using System.Collections.Generic;
   using System.Data;
+  using System.Linq;
   using MySql.Data.MySqlClient;
   using WhibModel;
 
@@ -12,50 +13,29 @@
   public static class CityDataAccessor
   {
     /// <summary>
+    /// The list of fields that are read back from the database for a city.
+    /// </summary>
+    private const string FieldList = "SELECT Id, IsDeleted, RegionId, EnglishName, LocalName, Population FROM City";
+
+    /// <summary>
     /// Returns the list of all cities from the database.
     /// </summary>
     /// <returns>A list of all the cities from the database.</returns>
     public static IEnumerable<City> GetCities()
     {
-      List<City> cityList = new List<City>();
-      MySqlConnection connection = null;
+      string querySql = string.Format("{0};", FieldList);
+      return ExecuteSelectCity(querySql);
+    }
 
-      try
-      {
-        using (connection = new MySqlConnection(DataAccessorBase.ConnectionString))
-        {
-          connection.Open();
-
-          string querySql = "SELECT Id, IsDeleted, RegionId, EnglishName, LocalName, Population FROM City;";
-          MySqlCommand sqlCommand = new MySqlCommand(querySql, connection);
-
-          MySqlDataReader reader = sqlCommand.ExecuteReader();
-
-          while (reader.Read())
-          {
-            City city = PopulateCityFromReader(reader);
-            if (city != null)
-            {
-              cityList.Add(city);
-            }
-          }
-        }
-
-        if (connection.State != ConnectionState.Closed)
-        {
-          connection.Close();
-        }
-      }
-      catch { }
-      finally
-      {
-        if (connection != null && connection.State != ConnectionState.Closed)
-        {
-          connection.Close();
-        }
-      }
-
-      return cityList;
+    /// <summary>
+    /// Returns the list of all cities from the database for a given region id.
+    /// </summary>
+    /// <param name="regionId">The region id to get the list for.</param>
+    /// <returns>A list of all the cities from the database.</returns>
+    public static IEnumerable<City> GetCitiesByRegionId(int regionId)
+    {
+      string querySql = string.Format("{0} WHERE RegionId = {1};", FieldList, regionId);
+      return ExecuteSelectCity(querySql);
     }
 
     /// <summary>
@@ -65,41 +45,16 @@
     /// <returns>The city for the given id number, or null if not found.</returns>
     public static City GetCity(int id)
     {
-      City city = null;
-      MySqlConnection connection = null;
-
-      try
+      string querySql = string.Format("{0} WHERE Id = {1};", FieldList, id);
+      IEnumerable<City> cityList = ExecuteSelectCity(querySql);
+      if (cityList == null || cityList.FirstOrDefault() == null || cityList.Count() > 1)
       {
-        using (connection = new MySqlConnection(DataAccessorBase.ConnectionString))
-        {
-          connection.Open();
-
-          string querySql = string.Format("SELECT Id, IsDeleted, RegionId, EnglishName, LocalName, Population FROM City WHERE Id = {0};", id);
-          MySqlCommand sqlCommand = new MySqlCommand(querySql, connection);
-
-          MySqlDataReader reader = sqlCommand.ExecuteReader();
-
-          while (reader.Read())
-          {
-            city = PopulateCityFromReader(reader);
-          }
-        }
-
-        if (connection.State != ConnectionState.Closed)
-        {
-          connection.Close();
-        }
+        return null;
       }
-      catch { }
-      finally
+      else
       {
-        if (connection != null && connection.State != ConnectionState.Closed)
-        {
-          connection.Close();
-        }
+        return cityList.First();
       }
-
-      return city;
     }
 
     /// <summary>
@@ -144,6 +99,51 @@
           connection.Close();
         }
       }
+    }
+
+    /// <summary>
+    /// Returns a list of all cities from the database.
+    /// </summary>
+    /// <param name="querySql">The sql to get the cities from the database.</param>
+    /// <returns>A list of all the cities from the database for the given query.</returns>
+    private static IEnumerable<City> ExecuteSelectCity(string querySql)
+    {
+      List<City> cityList = new List<City>();
+      MySqlConnection connection = null;
+
+      try
+      {
+        using (connection = new MySqlConnection(DataAccessorBase.ConnectionString))
+        {
+          connection.Open();
+          MySqlCommand sqlCommand = new MySqlCommand(querySql, connection);
+          MySqlDataReader reader = sqlCommand.ExecuteReader();
+
+          while (reader.Read())
+          {
+            City city = PopulateCityFromReader(reader);
+            if (city != null)
+            {
+              cityList.Add(city);
+            }
+          }
+        }
+
+        if (connection.State != ConnectionState.Closed)
+        {
+          connection.Close();
+        }
+      }
+      catch { }
+      finally
+      {
+        if (connection != null && connection.State != ConnectionState.Closed)
+        {
+          connection.Close();
+        }
+      }
+
+      return cityList;
     }
 
     /// <summary>

@@ -43,6 +43,16 @@
       this.lblLocalName = new System.Windows.Forms.Label();
       this.lblEnglishName = new System.Windows.Forms.Label();
       this.lblRegionType = new System.Windows.Forms.Label();
+      this.lblCapitalCity = new System.Windows.Forms.Label();
+      this.txtCapitalCity = new System.Windows.Forms.TextBox();
+      this.txtLargestCity = new System.Windows.Forms.TextBox();
+      this.lblLargestCity = new System.Windows.Forms.Label();
+      this.tabRegionDetail = new System.Windows.Forms.TabControl();
+      this.tbpCities = new System.Windows.Forms.TabPage();
+      this.tbpSubRegions = new System.Windows.Forms.TabPage();
+      this.ctlCities = new WhibManager.CitiesControl();
+      this.tabRegionDetail.SuspendLayout();
+      this.tbpCities.SuspendLayout();
       this.SuspendLayout();
       // 
       // lblIsoCode3
@@ -68,6 +78,7 @@
       this.txtAreaSqKm.Name = "txtAreaSqKm";
       this.txtAreaSqKm.Size = new System.Drawing.Size(120, 20);
       this.txtAreaSqKm.TabIndex = 31;
+      this.txtAreaSqKm.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       // 
       // txtPopulation
       // 
@@ -76,6 +87,7 @@
       this.txtPopulation.Name = "txtPopulation";
       this.txtPopulation.Size = new System.Drawing.Size(120, 20);
       this.txtPopulation.TabIndex = 30;
+      this.txtPopulation.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       // 
       // txtIsoCode3
       // 
@@ -84,6 +96,7 @@
       this.txtIsoCode3.Name = "txtIsoCode3";
       this.txtIsoCode3.Size = new System.Drawing.Size(44, 20);
       this.txtIsoCode3.TabIndex = 29;
+      this.txtIsoCode3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       // 
       // txtIsoCode2
       // 
@@ -92,13 +105,14 @@
       this.txtIsoCode2.Name = "txtIsoCode2";
       this.txtIsoCode2.Size = new System.Drawing.Size(28, 20);
       this.txtIsoCode2.TabIndex = 28;
+      this.txtIsoCode2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       // 
       // txtLocalName
       // 
       this.txtLocalName.Location = new System.Drawing.Point(112, 56);
       this.txtLocalName.MaxLength = 200;
       this.txtLocalName.Name = "txtLocalName";
-      this.txtLocalName.Size = new System.Drawing.Size(120, 20);
+      this.txtLocalName.Size = new System.Drawing.Size(200, 20);
       this.txtLocalName.TabIndex = 27;
       // 
       // txtEnglishName
@@ -106,7 +120,7 @@
       this.txtEnglishName.Location = new System.Drawing.Point(112, 30);
       this.txtEnglishName.MaxLength = 200;
       this.txtEnglishName.Name = "txtEnglishName";
-      this.txtEnglishName.Size = new System.Drawing.Size(120, 20);
+      this.txtEnglishName.Size = new System.Drawing.Size(200, 20);
       this.txtEnglishName.TabIndex = 26;
       // 
       // cmbRegionType
@@ -114,7 +128,7 @@
       this.cmbRegionType.FormattingEnabled = true;
       this.cmbRegionType.Location = new System.Drawing.Point(112, 3);
       this.cmbRegionType.Name = "cmbRegionType";
-      this.cmbRegionType.Size = new System.Drawing.Size(120, 21);
+      this.cmbRegionType.Size = new System.Drawing.Size(200, 21);
       this.cmbRegionType.TabIndex = 25;
       // 
       // lblAreaSqKm
@@ -165,10 +179,86 @@
       this.lblRegionType.TabIndex = 19;
       this.lblRegionType.Text = "Region Type";
       // 
+      // lblCapitalCity
+      // 
+      this.lblCapitalCity.Location = new System.Drawing.Point(238, 111);
+      this.lblCapitalCity.Name = "lblCapitalCity";
+      this.lblCapitalCity.Size = new System.Drawing.Size(100, 13);
+      this.lblCapitalCity.TabIndex = 34;
+      this.lblCapitalCity.Text = "Capital City";
+      // 
+      // txtCapitalCity
+      // 
+      this.txtCapitalCity.Location = new System.Drawing.Point(344, 108);
+      this.txtCapitalCity.MaxLength = 200;
+      this.txtCapitalCity.Name = "txtCapitalCity";
+      this.txtCapitalCity.Size = new System.Drawing.Size(200, 20);
+      this.txtCapitalCity.TabIndex = 35;
+      // 
+      // txtLargestCity
+      // 
+      this.txtLargestCity.Location = new System.Drawing.Point(344, 134);
+      this.txtLargestCity.MaxLength = 200;
+      this.txtLargestCity.Name = "txtLargestCity";
+      this.txtLargestCity.Size = new System.Drawing.Size(200, 20);
+      this.txtLargestCity.TabIndex = 36;
+      // 
+      // lblLargestCity
+      // 
+      this.lblLargestCity.Location = new System.Drawing.Point(238, 137);
+      this.lblLargestCity.Name = "lblLargestCity";
+      this.lblLargestCity.Size = new System.Drawing.Size(100, 13);
+      this.lblLargestCity.TabIndex = 37;
+      this.lblLargestCity.Text = "Largest City";
+      // 
+      // tabRegionDetail
+      // 
+      this.tabRegionDetail.Controls.Add(this.tbpCities);
+      this.tabRegionDetail.Controls.Add(this.tbpSubRegions);
+      this.tabRegionDetail.Location = new System.Drawing.Point(3, 160);
+      this.tabRegionDetail.Name = "tabRegionDetail";
+      this.tabRegionDetail.SelectedIndex = 0;
+      this.tabRegionDetail.Size = new System.Drawing.Size(560, 237);
+      this.tabRegionDetail.TabIndex = 38;
+      // 
+      // tbpCities
+      // 
+      this.tbpCities.Controls.Add(this.ctlCities);
+      this.tbpCities.Location = new System.Drawing.Point(4, 22);
+      this.tbpCities.Name = "tbpCities";
+      this.tbpCities.Padding = new System.Windows.Forms.Padding(3);
+      this.tbpCities.Size = new System.Drawing.Size(552, 211);
+      this.tbpCities.TabIndex = 0;
+      this.tbpCities.Text = "Cities";
+      this.tbpCities.UseVisualStyleBackColor = true;
+      // 
+      // tbpSubRegions
+      // 
+      this.tbpSubRegions.Location = new System.Drawing.Point(4, 22);
+      this.tbpSubRegions.Name = "tbpSubRegions";
+      this.tbpSubRegions.Padding = new System.Windows.Forms.Padding(3);
+      this.tbpSubRegions.Size = new System.Drawing.Size(552, 211);
+      this.tbpSubRegions.TabIndex = 1;
+      this.tbpSubRegions.Text = "Sub Regions";
+      this.tbpSubRegions.UseVisualStyleBackColor = true;
+      // 
+      // ctlCities
+      // 
+      this.ctlCities.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.ctlCities.Location = new System.Drawing.Point(3, 3);
+      this.ctlCities.Name = "ctlCities";
+      this.ctlCities.Size = new System.Drawing.Size(546, 205);
+      this.ctlCities.TabIndex = 0;
+      // 
       // RegionControl
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.Controls.Add(this.tabRegionDetail);
+      this.Controls.Add(this.lblLargestCity);
+      this.Controls.Add(this.txtLargestCity);
+      this.Controls.Add(this.txtCapitalCity);
+      this.Controls.Add(this.lblCapitalCity);
       this.Controls.Add(this.lblIsoCode3);
       this.Controls.Add(this.lblIsoCode2);
       this.Controls.Add(this.txtAreaSqKm);
@@ -185,7 +275,9 @@
       this.Controls.Add(this.lblEnglishName);
       this.Controls.Add(this.lblRegionType);
       this.Name = "RegionControl";
-      this.Size = new System.Drawing.Size(424, 319);
+      this.Size = new System.Drawing.Size(563, 436);
+      this.tabRegionDetail.ResumeLayout(false);
+      this.tbpCities.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -208,5 +300,13 @@
     private System.Windows.Forms.Label lblLocalName;
     private System.Windows.Forms.Label lblEnglishName;
     private System.Windows.Forms.Label lblRegionType;
+    private System.Windows.Forms.Label lblCapitalCity;
+    private System.Windows.Forms.TextBox txtCapitalCity;
+    private System.Windows.Forms.TextBox txtLargestCity;
+    private System.Windows.Forms.Label lblLargestCity;
+    private System.Windows.Forms.TabControl tabRegionDetail;
+    private System.Windows.Forms.TabPage tbpCities;
+    private System.Windows.Forms.TabPage tbpSubRegions;
+    private CitiesControl ctlCities;
   }
 }

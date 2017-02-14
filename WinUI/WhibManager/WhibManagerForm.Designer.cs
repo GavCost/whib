@@ -30,7 +30,7 @@
     {
       this.tabControl1 = new System.Windows.Forms.TabControl();
       this.tbpRegions = new System.Windows.Forms.TabPage();
-      this.regionsControl1 = new RegionsControl();
+      this.regionsControl1 = new WhibManager.RegionsControl();
       this.tbpOrganizations = new System.Windows.Forms.TabPage();
       this.tabControl1.SuspendLayout();
       this.tbpRegions.SuspendLayout();
@@ -44,7 +44,7 @@
       this.tabControl1.Location = new System.Drawing.Point(0, 0);
       this.tabControl1.Name = "tabControl1";
       this.tabControl1.SelectedIndex = 0;
-      this.tabControl1.Size = new System.Drawing.Size(628, 475);
+      this.tabControl1.Size = new System.Drawing.Size(803, 473);
       this.tabControl1.TabIndex = 0;
       // 
       // tbpRegions
@@ -53,7 +53,7 @@
       this.tbpRegions.Location = new System.Drawing.Point(4, 22);
       this.tbpRegions.Name = "tbpRegions";
       this.tbpRegions.Padding = new System.Windows.Forms.Padding(3);
-      this.tbpRegions.Size = new System.Drawing.Size(620, 449);
+      this.tbpRegions.Size = new System.Drawing.Size(795, 447);
       this.tbpRegions.TabIndex = 0;
       this.tbpRegions.Text = "Regions";
       // 
@@ -62,7 +62,7 @@
       this.regionsControl1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.regionsControl1.Location = new System.Drawing.Point(3, 3);
       this.regionsControl1.Name = "regionsControl1";
-      this.regionsControl1.Size = new System.Drawing.Size(614, 443);
+      this.regionsControl1.Size = new System.Drawing.Size(789, 441);
       this.regionsControl1.TabIndex = 0;
       // 
       // tbpOrganizations
@@ -75,13 +75,13 @@
       this.tbpOrganizations.Text = "Organizations";
       this.tbpOrganizations.UseVisualStyleBackColor = true;
       // 
-      // WhibManager
+      // WhibManagerForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(628, 475);
+      this.ClientSize = new System.Drawing.Size(803, 473);
       this.Controls.Add(this.tabControl1);
-      this.Name = "WhibManager";
+      this.Name = "WhibManagerForm";
       this.ShowIcon = false;
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "Whib Manager";
