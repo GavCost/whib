@@ -64,7 +64,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WhibModel\WhibModel.csproj">
+    <ProjectReference Include="..\..\Common\WhibModel\WhibModel.csproj">
       <Project>{474900f3-8254-4d69-a9fd-44989af3aed5}</Project>
       <Name>WhibModel</Name>
     </ProjectReference>

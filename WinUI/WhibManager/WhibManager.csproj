@@ -56,19 +56,28 @@
     <Compile Include="RegionControl.Designer.cs">
       <DependentUpon>RegionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="WhibManager.cs">
+    <Compile Include="RegionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RegionsControl.Designer.cs">
+      <DependentUpon>RegionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WhibManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WhibManager.Designer.cs">
-      <DependentUpon>WhibManager.cs</DependentUpon>
+    <Compile Include="WhibManagerForm.Designer.cs">
+      <DependentUpon>WhibManagerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="RegionControl.resx">
       <DependentUpon>RegionControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhibManager.resx">
-      <DependentUpon>WhibManager.cs</DependentUpon>
+    <EmbeddedResource Include="RegionsControl.resx">
+      <DependentUpon>RegionsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WhibManagerForm.resx">
+      <DependentUpon>WhibManagerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -94,7 +103,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WhibModel\WhibModel.csproj">
+    <ProjectReference Include="..\..\Common\WhibModel\WhibModel.csproj">
       <Project>{474900F3-8254-4D69-A9FD-44989AF3AED5}</Project>
       <Name>WhibModel</Name>
     </ProjectReference>

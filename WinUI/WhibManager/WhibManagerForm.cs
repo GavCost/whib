@@ -3,16 +3,16 @@
   using System;
   using System.Windows.Forms;
 
-  public partial class WhibManager : Form
+  public partial class WhibManagerForm : Form
   {
-    public WhibManager()
+    public WhibManagerForm()
     {
       InitializeComponent();
     }
 
     private void WhibManager_Load(object sender, EventArgs e)
     {
-      regionControl1.LoadRegions();
+      regionsControl1.LoadRegions();
     }
   }
 }
